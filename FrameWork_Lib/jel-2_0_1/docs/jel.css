@@ -1,0 +1,25 @@
+BODY { 
+ background:#99CCCC url(back1.gif); 
+ color: #000000;
+ margin-left: 5%;
+ margin-right: 4%;
+}
+
+H1 {
+ margin-left: -1%;
+ font-variant: small-caps;
+}
+
+H2,H3 {
+ margin-left: -0.5%;
+}
+
+.Emblemka { 
+ float:right;
+ }
+
+.Copyright {
+ font-size:120%;
+ text-align: center;
+}
+

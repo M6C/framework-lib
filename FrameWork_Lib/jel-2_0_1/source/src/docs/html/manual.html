@@ -1,0 +1,1910 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Java Expressions Library</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"></HEAD
+><BODY
+CLASS="book"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="BOOK"
+><A
+NAME="AEN1"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+><A
+NAME="AEN1"
+>Java Expressions Library</A
+></H1
+><HR></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+>1. <A
+HREF="#AEN3"
+>About this manual</A
+></DT
+><DT
+>2. <A
+HREF="#AEN7"
+>JEL design goals</A
+></DT
+><DT
+>3. <A
+HREF="#AEN10"
+>Features</A
+></DT
+><DT
+>4. <A
+HREF="#AEN49"
+>How to use JEL.</A
+></DT
+><DT
+>5. <A
+HREF="#AEN104"
+>Using libraries</A
+></DT
+><DD
+><DL
+><DT
+>5.1. <A
+HREF="#AEN145"
+>Exporting static methods of classes to JEL
+  namespace.</A
+></DT
+><DT
+>5.2. <A
+HREF="#AEN169"
+>Exporting virtual methods of classes to JEL namespace.</A
+></DT
+><DT
+>5.3. <A
+HREF="#AEN226"
+>Enabling the dot operator on objects.</A
+></DT
+><DT
+>5.4. <A
+HREF="#AEN235"
+>Dynamic variables interface.</A
+></DT
+><DT
+>5.5. <A
+HREF="#AEN292"
+>Objects down-casting.</A
+></DT
+></DL
+></DD
+><DT
+>6. <A
+HREF="#AEN304"
+>Automatic unwrapping of objects to primitive
+  types.</A
+></DT
+><DT
+>7. <A
+HREF="#AEN337"
+>Error detection and reporting</A
+></DT
+><DT
+>8. <A
+HREF="#AEN355"
+>Making things faster</A
+></DT
+><DT
+>9. <A
+HREF="#AEN380"
+>Serialization of compiled expressions</A
+></DT
+><DT
+>10. <A
+HREF="#AEN387"
+>Limitations of JEL</A
+></DT
+><DT
+>11. <A
+HREF="#AEN395"
+>Summarizing remarks</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN3"
+></A
+>Chapter 1. About this manual</H1
+><P
+>This manual is mostly examples-based. It starts with two
+  simple step-by-step examples (showing how to deal with static and
+  dynamic libraries), which should give enough information for basic
+  JEL usage (but don't forget to read the rest of this manual to learn
+  how to get the top performance from JEL). The additional information
+  can be found in <A
+HREF="javadoc/index.html"
+TARGET="_top"
+>API
+  documentation</A
+>.</P
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN7"
+></A
+>Chapter 2. JEL design goals</H1
+><P
+>The main design goal was to create light weight expression compiler
+generating extremely fast code. The main emphasis is the code
+execution time and not the compilation time (it is nevertheless
+small). The other goal was to make JEL language to be very close to
+Java language with direct access to all built-in Java data types and
+functions.</P
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN10"
+></A
+>Chapter 3. Features</H1
+><P
+></P
+><UL
+><LI
+><P
+>Support for all Java data types (boolean, byte,
+    char, short, long, int, float, double, arrays,
+    references)</P
+></LI
+><LI
+><P
+>Octal (0456) and hexadecimal (0x1FFF)
+    literals.</P
+></LI
+><LI
+><P
+>Support for all Java arithmetic operators: +
+    (add),- (subtract), * (multiply), / (divide), % (remainder), &#38;
+    (bitwise and),| (bitwise or), ^ (bitwise xor),~ (bitwise
+    complement), &#60;&#60; (left shift), &#62;&#62; (right signed shift),
+    &#62;&#62;&#62; (right unsigned shift); on most of supported data
+    types according to Java Language Specification
+    (JLS)</P
+></LI
+><LI
+><P
+>Comparison operators (==,!=,&#60;,&#62;=,&#62;,&#60;=)
+    as defined by JLS.</P
+></LI
+><LI
+><P
+>dot (".") operator on objects
+    ("abc".length()==3).</P
+></LI
+><LI
+><P
+>dot (".") operator on objects
+    ("abc".length()==3).</P
+></LI
+><LI
+><P
+>Boolean logical operators (&#38;&#38;,||,!) with
+    lazy evaluation (i.e. in the expression
+    false&#38;&#38;complexBooleanFunction() the function is never
+    called).</P
+></LI
+><LI
+><P
+>Conditionals (true?2:3 = 2)</P
+></LI
+><LI
+><P
+>Direct access to methods and fields of Java
+    objects.</P
+></LI
+><LI
+><P
+>Method overloading according to
+    JLS.</P
+></LI
+><LI
+><P
+>Dynamic variables interface allowing to add
+    variables to JEL namespace without supplying the class file
+    defining them.</P
+></LI
+><LI
+><P
+>Automatic unwrapping of designated objects to Java
+    primitive types.</P
+></LI
+><LI
+><P
+>Support for strings. Objects of class
+    java.lang.String can be directly entered into expressions using
+    double quotes, also the standard Java escape codes are
+    parsed. Example : "a string\n\015".</P
+></LI
+><LI
+><P
+>String concatenation ("a"+2+(2&#62;3)+object
+    = "a2false"+object.toString()).</P
+></LI
+><LI
+><P
+>User definable string comparison using usual
+    relational operators "&#60;", "&#60;=", "&#62;",
+    "&#62;=", "==", "!=", which employs
+    locale by default.</P
+></LI
+><LI
+><P
+>User-controllable object down-casting using
+    "(class.name)var" syntax. It is possible to assign names
+    to classes in JEL expressions to be different from their real Java
+    class names.</P
+></LI
+><LI
+><P
+>Constants folding, extended (by default, but can
+    be controlled) to static methods (which are automatically called
+    at compile time) and static fields (which are considered
+    constants).</P
+></LI
+><LI
+><P
+>High performance of generated code.</P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN49"
+></A
+>Chapter 4. How to use JEL.</H1
+><P
+>In this section a simple example of a program using JEL is
+  given, and explained with references to more detailed sections of
+  this manual. The example program evaluates the expression given on
+  its command line (similar program exists in the distribution under
+  the name <TT
+CLASS="filename"
+>./samples/Calculator.java</TT
+>), let's
+  follow it step by step.</P
+><PRE
+CLASS="programlisting"
+>&#13;    public static void main(String[] args) {
+    
+    // Assemble the expression
+    StringBuffer expr_sb=new StringBuffer();
+    for(int i=0;i&#60;args.length;i++) {
+      expr_sb.append(args[i]);
+      expr_sb.append(' ');
+      };
+    String expr=expr_sb.toString();
+  </PRE
+><P
+>This first part of the program is not related to JEL. It's
+  purpose is to assemble the expression, possibly, containing spaces
+  into the single line. This has to be done, because shells tend to
+  tokenize parameters but we don't need it here.
+  <PRE
+CLASS="programlisting"
+>    // Set up the library
+    Class[] staticLib=new Class[1];
+    try {
+      staticLib[0]=Class.forName("java.lang.Math");
+    } catch(ClassNotFoundException e) {
+      // Can't be ;)) ...... in java ... ;)
+    };
+    Library lib=new Library(staticLib,null,null,null,null);
+    try {
+    lib.markStateDependent("random",null);
+    } catch (NoSuchMethodException e) {
+      // Can't be also
+    };
+  </PRE
+>
+  This piece of code establishes the namespace for use in JEL compiled
+  expressions. The <CODE
+CLASS="classname"
+>gnu.jel.Library</CODE
+> object
+  maintains this namespace.</P
+><P
+>There can be two types of names in the Library :
+  <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>static</I
+></SPAN
+> and
+  <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>virtual</I
+></SPAN
+> (dynamic).</P
+><P
+>Methods and variables of the first class are assumed (by
+  default) to be dependent only on their arguments i.e. not to save
+  any information from call to call (they are
+  "stateless")... Examples are mathematical functions like
+  <CODE
+CLASS="function"
+>sin</CODE
+>, <CODE
+CLASS="function"
+>cos</CODE
+>,
+  <CODE
+CLASS="function"
+>log</CODE
+>, constants <CODE
+CLASS="constant"
+>E</CODE
+>,
+  <CODE
+CLASS="constant"
+>PI</CODE
+> in <CODE
+CLASS="constant"
+>java.lang.Math</CODE
+>.  For
+  such methods (fields) it does not matter how many times (when) they
+  will be called (their value will be taken) the result will always be
+  the same provided arguments (if they are present) are the
+  same. Stateless methods will be evaluated by JEL at compile time if
+  their arguments are constants (known at compile time). To define set
+  of static functions(fields) it is needed to pass the array of Class
+  objects, defining those functions, as the first parameter of the
+  library constructor (see example above). Note ONLY STATIC functions
+  of the Classes, passed in the first argument of the
+  <CODE
+CLASS="classname"
+>gnu.jel.Library</CODE
+> constructor will be defined
+  in the namespace. By default all static functions are considered
+  "stateless" by JEL.</P
+><P
+>However, some static functions still save their state (in
+  static variables) in between calls. Thus they return different
+  results, depending on when (how many times) they are is called even
+  if their arguments are the same. If such function is evaluated at
+  compile time, we have troubles, because it will be evaluated only
+  once during expression lifetime and it's state dependence will be
+  lost. Typical example of the static function, having a state is
+  <CODE
+CLASS="function"
+>java.lang.Math.random</CODE
+>. JEL has special
+  mechanism, provided by <CODE
+CLASS="classname"
+>gnu.jel.Library</CODE
+> class
+  to mark static functions as state dependent. (see the above example
+  to find out how it was done for the
+  <CODE
+CLASS="function"
+>java.lang.Math.random</CODE
+>)</P
+><P
+>The virtual functions, which are
+  <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>explicitly</I
+></SPAN
+> state dependent, will be discussed
+  later in this document. The example we currently consider does not
+  use them. However, virtual functions are, actually, most important
+  to JEL because expression, containing all stateless functions, is a
+  constant, it will be completely evaluated at compile time, there is
+  absolutely no sense to evaluate such expression repeatedly (this is
+  what JEL was designed for). Still we shall continue with this simple
+  example as the following code is mostly independent of whether we
+  use virtual functions or not...</P
+><P
+><PRE
+CLASS="programlisting"
+>    // Compile
+    CompiledExpression expr_c=null;
+    try {
+      expr_c=Evaluator.compile(expr,lib);
+    } catch (CompilationException ce) {
+      System.err.print("&#8211;&#8211;&#8211;COMPILATION ERROR :");
+      System.err.println(ce.getMessage());
+      System.err.print("                       ");
+      System.err.println(expr);
+      int column=ce.getColumn(); // Column, where error was found
+      for(int i=0;i&#60;column+23-1;i++) System.err.print(' ');
+      System.err.println('^');
+    };</PRE
+>
+
+    This chunk of code is for the expression compilation. The crucial
+    line is the call to <CODE
+CLASS="function"
+>Evaluator.compile</CODE
+>, it is the
+    point, where expression gets transformed into Java bytecode,
+    loaded into the Java Virtual Machine using JEL ClassLoader and
+    returned to caller as an instance of the subclass of
+    <CODE
+CLASS="classname"
+>gnu.jel.CompiledExpression</CODE
+>.
+    Typical user of JEL is not
+    required to know what magic is going on inside of
+    <CODE
+CLASS="function"
+>Evaluator.compile(...)</CODE
+>. 
+    Other code in this chunk is for
+    the error reporting and will be discussed in the specialized
+    section <A
+HREF="#AEN337"
+><I
+>Error detection and reporting</I
+></A
+> below.
+  </P
+><P
+><PRE
+CLASS="programlisting"
+>&#13;      if (expr_c !=null) {
+      
+      // Evaluate (Can do it now any number of times FAST !!!)
+      Number result=null;
+      try {
+	result=(Number)expr_c.evaluate(null);
+      } catch (Throwable e) {
+	System.err.println("Exception emerged from JEL compiled"+
+			   " code (IT'S OK) :");
+	System.err.print(e);
+      };
+  </PRE
+>
+  This code does the evaluation of the expression. It is done by
+  calling the <CODE
+CLASS="function"
+>evaluate</CODE
+> method of the JEL 
+  compiled class, it is defined abstract in 
+  <CODE
+CLASS="classname"
+>gnu.jel.CompiledExpression</CODE
+> but is
+  redefined in the class compiled by JEL. The argument of this method
+  is discussed in the section on virtual functions below. If only
+  static functions are present in the library it is safe to pass the
+  <CODE
+CLASS="constant"
+>null</CODE
+> pointer as the argument to 
+  <CODE
+CLASS="function"
+>evaluate</CODE
+>.
+  </P
+><P
+>Result of the <CODE
+CLASS="function"
+>evaluate</CODE
+> method is always
+  an object. JEL converts primitive numeric types into instances of
+  corresponding Java reflection classes (read the section 
+  <A
+HREF="#AEN355"
+><I
+>Making things faster</I
+></A
+>  to find out how to avoid
+  this conversion). For example, a value of primitive type
+  <SPAN
+CLASS="type"
+>long</SPAN
+> will be returned as an instance of
+  <CODE
+CLASS="classname"
+>java.lang.Long</CODE
+> class (<SPAN
+CLASS="type"
+>int</SPAN
+> maps to
+  <CODE
+CLASS="classname"
+>java.lang.Integer</CODE
+>, <SPAN
+CLASS="type"
+>float</SPAN
+> to
+  <CODE
+CLASS="classname"
+>java.lang.Float</CODE
+>, etc.). If result is an arbitrary Java
+  object it is returned as the reference to that object.</P
+><P
+>The <PRE
+CLASS="programlisting"
+>try ... catch</PRE
+> clause
+  around the call to <CODE
+CLASS="function"
+>evaluate</CODE
+> will be enforced by the Java
+  compiler. It is required as errors can appear during evaluation. The
+  general rule is: <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>syntax, types incompatibility and function
+  resolution errors will be reported at compile time (as thrown
+  instance of <CODE
+CLASS="classname"
+>gnu.jel.CompilationException</CODE
+>),
+  while the errors in the
+  values of numbers will be reported at the execution
+  time</I
+></SPAN
+>. For example expression "1/0" will generate no error
+  at compile time (nevertheless it is the constant expression and its
+  evaluation is attempted), but at the time of calling
+  <CODE
+CLASS="function"
+>execute</CODE
+>
+  you will get a <CODE
+CLASS="classname"
+>java.lang.ArithmeticError</CODE
+> (division
+  by zero) as it should be.</P
+><P
+><PRE
+CLASS="programlisting"
+>      // Print result
+      if (result==null) 
+	System.out.println("void");
+      else
+	System.out.println(result.toString());
+   };
+};</PRE
+>
+This last piece of code will print the result. And is concluding our
+brief tour of the JEL usage.</P
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN104"
+></A
+>Chapter 5. Using libraries</H1
+><P
+>The namespace of JEL expressions is represented by
+<CODE
+CLASS="classname"
+>gnu.jel.Library</CODE
+> class. Its constructor:
+<PRE
+CLASS="programlisting"
+>Library(Class[]�staticLib, Class[]�dynamicLib,
+Class[]�dotClasses, DVMap� resolver,
+Hashtable�cnmap)</PRE
+>has five arguments. Their purposes are
+following:<P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+>staticLib</DT
+><DD
+><P
+>enumerates classes whose <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>static</I
+></SPAN
+>
+  methods are exported to JEL namespace and become usable from within
+  expressions. Such methods do not require <CODE
+CLASS="varname"
+>this</CODE
+> pointer
+  supplied to them at execution time.
+  <A
+HREF="#AEN145"
+>More details</A
+></P
+></DD
+><DT
+>dynamicLib</DT
+><DD
+><P
+>enumerates classes whose <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>virtual</I
+></SPAN
+> methods
+  are exported. These methods require the references to the
+  corresponding classes (<CODE
+CLASS="varname"
+>this</CODE
+> pointers) supplied to the
+  expression at run-time. This is done using the <SPAN
+CLASS="type"
+>Class[]</SPAN
+>&#62;
+  argument of <CODE
+CLASS="classname"
+>CompiledExpression</CODE
+>'s 
+  <CODE
+CLASS="function"
+>evaluate</CODE
+> method.
+  <A
+HREF="#AEN169"
+>More details</A
+></P
+></DD
+><DT
+>dotClasses</DT
+><DD
+><P
+>controls access for the dot (".")
+  operator on classes.
+  <A
+HREF="#AEN226"
+>More details</A
+></P
+></DD
+><DT
+>resolver</DT
+><DD
+><P
+>Dynamic variables interface. Allows to add new
+  variables to the expressions names without supplying the class files
+  defining them.  
+  <A
+HREF="#AEN235"
+>More  details</A
+></P
+></DD
+><DT
+>cnmap</DT
+><DD
+><P
+>Maps the class names usable inside JEL expressions for
+  non-primitive type casts into the Java classes
+  <A
+HREF="#AEN292"
+>More  details</A
+></P
+></DD
+></DL
+></DIV
+></P
+><P
+>The details on usage of each of these arguments are given in a
+separate sections below.</P
+><P
+>The working example using all current functionality of JEL
+namespace is given in the 
+<TT
+CLASS="filename"
+>examples/YourTestBed</TT
+> directory in
+the distribution. You'll want to check it after reading this section.</P
+><DIV
+CLASS="section"
+><HR><H2
+CLASS="section"
+><A
+NAME="AEN145"
+>5.1. Exporting static methods of classes to JEL
+  namespace.</A
+></H2
+><P
+>The array of references to classes 
+  (<CODE
+CLASS="classname"
+>java.lang.Class</CODE
+>) whose public
+  <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>static</I
+></SPAN
+> methods and fields are to be exported should
+  be passed as the first argument of the library constructor
+  (<CODE
+CLASS="parameter"
+>staticLib</CODE
+>). The public static fields and 
+  methods of all these classes are merged together into the JEL namespace. The
+  non-public or non-static members of <CODE
+CLASS="parameter"
+>staticLib</CODE
+> classes
+  are ignored.</P
+><P
+>Methods overloading is supported and works also across classes
+  (because the JEL namespace works similarly to the namespace defined
+  in a single Java class). For example, if a class <CODE
+CLASS="classname"
+>C1</CODE
+>
+  contains the method <CODE
+CLASS="function"
+>public static C1.func(int)</CODE
+> 
+  and a class <CODE
+CLASS="classname"
+>C2</CODE
+> contains the method 
+  <CODE
+CLASS="function"
+>public static C2.func(double)</CODE
+> and both these
+  classes are passed as elements of the <CODE
+CLASS="parameter"
+>staticLib</CODE
+>
+  array. Then, the JEL expression <KBD
+CLASS="userinput"
+>"func(1)"</KBD
+> calls 
+  <CODE
+CLASS="function"
+>C1.func(int)</CODE
+> and the expression
+  <KBD
+CLASS="userinput"
+>"func(1.0)"</KBD
+> calls 
+  <CODE
+CLASS="function"
+>C2.func(double)</CODE
+>. It also means
+  that methods and fields of all classes supplied to the 
+  <CODE
+CLASS="classname"
+>Library</CODE
+> are subject to the same constraints
+  as members of a single Java class.</P
+><P
+>Moreover, because JEL allows to call methods with no arguments
+  omitting the empty brackets (that is <KBD
+CLASS="userinput"
+>"func()"</KBD
+>
+  and <KBD
+CLASS="userinput"
+>"func"</KBD
+> are equivalent) there should be no
+  fields and methods with no arguments having the same names in all
+  classes presented to the <CODE
+CLASS="classname"
+>Library</CODE
+> constructor.</P
+><P
+>To check whether the set of classes you gave to the library
+  constructor satisfies all required constraints run your program
+  against the debug version of JEL library
+  (<TT
+CLASS="filename"
+>jel_g.jar</TT
+>).  Then, potential problems will be
+  reported to you on the standard output.</P
+></DIV
+><DIV
+CLASS="section"
+><HR><H2
+CLASS="section"
+><A
+NAME="AEN169"
+>5.2. Exporting virtual methods of classes to JEL namespace.</A
+></H2
+><P
+>The second argument of the library constructor
+(<CODE
+CLASS="parameter"
+>dynamicLib</CODE
+>) works similarly to the first one.
+Except that only public <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>virtual</I
+></SPAN
+> members are taken from
+the listed classes. These members are merged into the namespace created from
+classes from the <CODE
+CLASS="parameter"
+>staticLib</CODE
+>. The rules for methods
+overloading are the same as for classes listed in the first argument of library
+constructor. Also, the overloading is working across the classes
+listed in both first and second arguments of the Library constructor.</P
+><P
+>The crucial difference in the handling of classes listed in the
+<CODE
+CLASS="parameter"
+>dynamicLib</CODE
+> and the <CODE
+CLASS="parameter"
+>staticLib</CODE
+>
+comes from the fact that virtual members of <CODE
+CLASS="parameter"
+>dynamicLib</CODE
+>
+require <CODE
+CLASS="varname"
+>this</CODE
+> reference to the instance of the object of
+their defining class be supplied at run-time. Thus, if 
+<CODE
+CLASS="classname"
+>C1</CODE
+> contains the virtual method
+<CODE
+CLASS="function"
+>public func(double x)</CODE
+> its invocation actually requires
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>two</I
+></SPAN
+> arguments, one is <CODE
+CLASS="parameter"
+>x</CODE
+> and the
+other is the reference to the instance of class 
+<CODE
+CLASS="classname"
+>C1</CODE
+>.</P
+><P
+>References to the instances of classes of the
+<CODE
+CLASS="parameter"
+>dynamicLib</CODE
+> array are supplied at the
+execution time to the argument of the 
+<CODE
+CLASS="function"
+>evaluate(Object[]�context)</CODE
+> method of
+<CODE
+CLASS="classname"
+>gnu.jel.CompiledExpression</CODE
+>. 
+The elements of the <CODE
+CLASS="parameter"
+>context</CODE
+> array
+should be instances of classes listed in <CODE
+CLASS="parameter"
+>dynamicLib</CODE
+>
+array at compile time and there should be one-to-one correspondence between
+them. For example, if
+<PRE
+CLASS="programlisting"
+>dynamicLib[0]=com.mycompany.MyClass.class)</PRE
+>,
+the corresponding
+entry in the context array, <CODE
+CLASS="parameter"
+>context[0]</CODE
+>, 
+must be a reference to
+the <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>instance</I
+></SPAN
+> of 
+<CODE
+CLASS="classname"
+>com.mycompany.MyClass</CODE
+>.</P
+><P
+>Formally, for every <CODE
+CLASS="varname"
+>i</CODE
+>, it should be possible to cast 
+the object in the <CODE
+CLASS="parameter"
+>context[i]</CODE
+>
+into the class, supplied in the <CODE
+CLASS="parameter"
+>dynamicLib[i]</CODE
+> array
+of the <CODE
+CLASS="classname"
+>Library</CODE
+> constructor, 
+otherwise <CODE
+CLASS="classname"
+>ClassCastException</CODE
+> will be thrown from
+<CODE
+CLASS="function"
+>evaluate</CODE
+>.</P
+><P
+>Let's walk through the example, which calculates function of the
+single variable many times and uses virtual method calls. This example
+will consist of two classes : a user written class (providing access
+to the variable) and the main class compiling and evaluating
+expressions.  First start with the variable 
+provider:<PRE
+CLASS="programlisting"
+>public class VariableProvider {
+  public double xvar;
+  
+  public double x() {return xvar;};
+};</PRE
+>
+This class is trivial, it just defines the function, returning the
+value of the variable <CODE
+CLASS="varname"
+>x</CODE
+>.</P
+><P
+>In the main class (see the first JEL example for headers) the code,
+constructing the library will be replaced 
+with:<PRE
+CLASS="programlisting"
+>    // Set up library
+    Class[] staticLib=new Class[1];
+    try {
+      staticLib[0]=Class.forName("java.lang.Math");
+    } catch(ClassNotFoundException e) {
+      // Can't be ;)) ...... in java ... ;)
+    };
+
+    Class[] dynamicLib=new Class[1];
+    VariableProvider variables=new VariableProvider();
+    Object[] context=new Object[1];
+    context[0]=variables;
+    dynamicLib[0]=variables.getClass();
+    
+    Library lib=new Library(staticLib,dynamicLib,null,null,null);
+    try {
+    lib.markStateDependent("random",null);
+    } catch (NoSuchMethodException e) {
+      // Can't be also
+    };</PRE
+>Absent in the static example, the additional code
+    creates the <CODE
+CLASS="classname"
+>VariableProvider</CODE
+> and assigns its
+    reference to an element of <CODE
+CLASS="parameter"
+>context</CODE
+> array (to be
+    passed to the <CODE
+CLASS="function"
+>evaluate</CODE
+> method
+    of the compiled expression). Also, now the 
+    <CODE
+CLASS="parameter"
+>dynamicLib</CODE
+> array as not null and contains
+    the reference to the <CODE
+CLASS="classname"
+>VariableProvider</CODE
+> class.</P
+><P
+>The code for compilation is exactly the same as in the example for
+    static functions, except we have additional function <CODE
+CLASS="varname"
+>x</CODE
+>
+    and the variable <CODE
+CLASS="varname"
+>xvar</CODE
+> defined for use inside the 
+    compiled expressions. JEL has the special notation for the functions, 
+    having no arguments, namely, brackets in <KBD
+CLASS="userinput"
+>"x()"</KBD
+> 
+    can be omitted to be "x". This allows to compile now ( with the above 
+    defined library) the expressions like <KBD
+CLASS="userinput"
+>"sin(x)"</KBD
+>,
+    <KBD
+CLASS="userinput"
+>"exp(x*x)"</KBD
+>, 
+    <KBD
+CLASS="userinput"
+>"pow(sin(x),2)+pow(cos(x),2)"</KBD
+>...</P
+><P
+>The code for evaluation of an expression having virtual
+    functions is replaced with:
+    <PRE
+CLASS="programlisting"
+>&#13;      if (expr_c !=null) {
+    
+        try {
+           for(int i=0;i&#60;100;i++) {
+              variables.xvar=i;      // &#60;- Value of the variable
+              System.out.println(expr_c.evaluate(context));
+                               //^^^^^^^^^^^^^^^ evaluating 100 times
+           };
+        } catch (Throwable e) {
+	   System.err.println("Exception emerged from JEL compiled"+
+		              " code (IT'S OK) :");
+           System.err.print(e);
+        };
+    };</PRE
+>
+    Note the two major differences: 1. we have explicitly 
+    assigned the value to the variable; 2. the array of object references 
+    (consisting of one element in this example) is passed to the 
+    <CODE
+CLASS="function"
+>evaluate</CODE
+> method. This piece of code will evaluate
+    expressions for <CODE
+CLASS="varname"
+>x=0..99</CODE
+> with 
+    step <CODE
+CLASS="constant"
+>1</CODE
+>.</P
+><P
+>This concludes our dynamic library example. Try to modify the
+    <TT
+CLASS="filename"
+>./Calculator.java</TT
+> sample yourself to allow 
+    compilation of virtual functions as described above.</P
+></DIV
+><DIV
+CLASS="section"
+><HR><H2
+CLASS="section"
+><A
+NAME="AEN226"
+>5.3. Enabling the dot operator on objects.</A
+></H2
+><P
+>The third argument of <CODE
+CLASS="classname"
+>gnu.jel.Library</CODE
+>
+  constructor enumerates classes which are available for dot operator
+  within the expression. If this parameter is <CODE
+CLASS="constant"
+>null</CODE
+>
+  JEL would not allow to use the dot operator at all. If it is an array
+  of the length zero (e.g. <CODE
+CLASS="constant"
+>new Class[0]</CODE
+>) 
+  JEL will open access to public methods
+  of <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>ALL</I
+></SPAN
+> objects encountered in the expression. From the
+  security point of view allowing access to all objects can be
+  dangerous, that is why there is a third case of non-zero length
+  array explicitly enumerating classes allowing the dot operator on
+  them.</P
+><P
+>Once the dot operator is allowed on a class, it is possible to call
+  all its public methods using the syntax
+  <KBD
+CLASS="userinput"
+>".method(arg1,arg2,...)"</KBD
+> in any context 
+  where this class appears in an expression.</P
+></DIV
+><DIV
+CLASS="section"
+><HR><H2
+CLASS="section"
+><A
+NAME="AEN235"
+>5.4. Dynamic variables interface.</A
+></H2
+><P
+>All methods of exporting names into JEL namespace described up to
+  this point relied on the Java class files for actual description of
+  methods names and parameters. However, sometimes it is required to add
+  a new variable to JEL namespace at run-time.</P
+><P
+>One of the solutions would be to generate a new class file (e.g. using
+  JEL) and supply it as a first or second argument of the library
+  constructor. Unfortunately this can be quite cumbersome and time
+  consuming.</P
+><P
+>The other solution can be to define a family of methods in JEL 
+  namespace <PRE
+CLASS="programlisting"
+>YYY getXXXProperty(String name)</PRE
+>for
+  each possible variable types, where <CODE
+CLASS="classname"
+>YYY</CODE
+> is the class
+  representing the property type and <CODE
+CLASS="classname"
+>XXX</CODE
+> is the name 
+  of the type. Then, supposing we have methods
+  <PRE
+CLASS="programlisting"
+>  double getDoubleProperty(String name); // YYY=double XXX=Double
+  String getStringProperty(String name); // YYY=java.lang.String XXX=String</PRE
+>in the JEL namespace (either static or dynamic),
+  the variables with arbitrary names can be entered into expression
+  using the syntax<PRE
+CLASS="programlisting"
+>getStringProperty("x") +
+  (getDoubleProperty("y")+1.0)</PRE
+></P
+><P
+>This way has two drawbacks: 1) user has to remember the type of the
+  variable (to call the appropriate <CODE
+CLASS="function"
+>getXXX()</CODE
+> method); 
+  2) a lot to type.</P
+><P
+>Since the version 0.9.3 JEL provides the way to solve both
+  these problems. To do that the fourth argument
+  (<CODE
+CLASS="parameter"
+>resolver</CODE
+>) of the library constructor is
+  used. This argument supplies the reference to the subclass of
+  <CODE
+CLASS="classname"
+>gnu.jel.DVMap</CODE
+>, and is used by JEL to resolve
+  the dynamic variable names.  The <CODE
+CLASS="classname"
+>gnu.jel.DVMap</CODE
+>
+  has an abstract method
+  <PRE
+CLASS="programlisting"
+>public String getTypeName(String  name)</PRE
+>
+  which returns XXX (see above) for a given  variable name, or null if no
+  such variable is defined. Note that for resolver to work the family of
+  methods
+  <PRE
+CLASS="programlisting"
+>YYY getXXXProperty(String name)</PRE
+>
+  must still be present in JEL namespace (e.g. as members of one of
+  <CODE
+CLASS="parameter"
+>dynamicLib[]</CODE
+> classes).</P
+><P
+>Then, supposing<PRE
+CLASS="programlisting"
+>resolver.getTypeName("x")=="String" &#38;&#38;
+resolver.getTypeName("y")=="Double"</PRE
+>
+   the expression <KBD
+CLASS="userinput"
+>"x+(y+1.0)"</KBD
+> will be automatically
+   converted by JEL into
+   <PRE
+CLASS="programlisting"
+>getStringProperty("x")+(getDoubleProperty("y")+1.0)</PRE
+>
+   and compiled. Thus, user does not have to remember the variable types,
+   typing is reduced and the existence of variables can be checked at the
+  compile time.</P
+><P
+>JEL also supports a hierarchical structure of variables. This means
+  the dot (".") symbol can be present in the dynamic variable
+  names. For example if
+  <PRE
+CLASS="programlisting"
+>resolver.getTypeName("x")!=null &#38;&#38; 
+resolver.getTypeName("x.f1")=="String" &#38;&#38; 
+resolver.getTypeName("x.f2")=="Double"</PRE
+>
+  the expression <KBD
+CLASS="userinput"
+>"x.f1+(x.f2+1.0)"</KBD
+> will
+  be compiled by JEL as
+  <PRE
+CLASS="programlisting"
+>getStringProperty("x.f1")+(getDoubleProperty("x.f2")+1.0)</PRE
+>
+  and (combined with dot operator) the expression 
+  <KBD
+CLASS="userinput"
+>"x.f1.length()"</KBD
+> will result in the length
+  of the string <CODE
+CLASS="function"
+>getString("x1.f1")</CODE
+>.</P
+><P
+>Notice in the last example that if one wants to have defined
+  the dynamic variable <KBD
+CLASS="userinput"
+>"x.y"</KBD
+> the variable
+  <KBD
+CLASS="userinput"
+>"x"</KBD
+> must
+  also be the dynamic variable
+  (<CODE
+CLASS="constant"
+>resolver.getTypeName("x")!=null</CODE
+>).</P
+><P
+>If there is conflict between the dynamic variable name and other
+  name in JEL namespace the dynamic variable has a priority.</P
+><P
+>Since JEL 0.9.9 it is possible to translate the names of dynamic
+  variables from strings into the constants of Java primitive
+  types. This is done using non-identity <CODE
+CLASS="function"
+>DVMap.translate</CODE
+>
+  method. The translation helps to improve performance in some cases.</P
+><P
+>Consider the following example. Suppose the underlying storage for
+  dynamic variables is an array (or <CODE
+CLASS="classname"
+>Vector</CODE
+>), so that
+  the value of the variable can be obtained by an integer index into that 
+  array (like numbered columns in a spreadsheet). Next, assume you still
+  want to refer to the variables by names (e.g. you allowed user to assign 
+  names to the columns). Now, if the first column is named 
+  <KBD
+CLASS="userinput"
+>"x"</KBD
+> and
+  is of Double type, an expression <KBD
+CLASS="userinput"
+>"x"</KBD
+>,
+  using dynamic variables interface with identity translation will be
+  compiled into <KBD
+CLASS="userinput"
+>getDoubleProperty("x")</KBD
+>.
+  It means the translation of
+  the string <KBD
+CLASS="userinput"
+>"x"</KBD
+> into the column number
+  <CODE
+CLASS="constant"
+>1</CODE
+> will have to be
+  performed at run-time each time the expression is
+  evaluated. Considering that Java strings are immutable, this may incur
+  a substantial performance penalty.</P
+><P
+>The performance can be improved if the <CODE
+CLASS="function"
+>translate</CODE
+>
+  method of <CODE
+CLASS="classname"
+>DVMap</CODE
+> is overridden by the following:
+  <PRE
+CLASS="programlisting"
+>public Object translate(String name) {
+   if (name.equals("x")) return new Integer(1);
+   return name;
+   };</PRE
+>
+   This is already a non-identity translation. With such
+   <CODE
+CLASS="classname"
+>DVMap</CODE
+> the expression "x" will be
+   compiled by JEL into <KBD
+CLASS="userinput"
+>getDoubleProperty(1)</KBD
+>, 
+   note that it is
+   <CODE
+CLASS="function"
+>getDoubleProperty(int)</CODE
+> method, which is called.
+   This way the mapping of the variable name into the variable index is
+   performed at compile-time, while at run-time the index is readily available.
+   By defining the appropriate translations the dynamic variable lookup can
+   be split in a user-controlled way between the expression compilation
+  and execution stages to achieve the best performance.</P
+><P
+>The <CODE
+CLASS="function"
+>translate</CODE
+> method is allowed to return
+  only instances of Java reflection classes wrapping the primitive types
+  (<CODE
+CLASS="classname"
+>java.lang.Integer</CODE
+>,
+  <CODE
+CLASS="classname"
+>java.lang.Double</CODE
+>, etc), or
+  strings (otherwise an exception will emerge at compile-time). This is
+  because only these types of objects can be stored in the Java class
+  files directly. Also, it is responsibility of the caller to ensure
+  that JEL namespace contains <CODE
+CLASS="function"
+>getXXXProperty</CODE
+> methods
+  with all the necessary argument types, corresponding to the translations
+  defined in <CODE
+CLASS="classname"
+>DVMap</CODE
+>. For identity translations only
+  <CODE
+CLASS="function"
+>getXXXProperty</CODE
+> methods accepting strings are
+  necessary.</P
+></DIV
+><DIV
+CLASS="section"
+><HR><H2
+CLASS="section"
+><A
+NAME="AEN292"
+>5.5. Objects down-casting.</A
+></H2
+><P
+>The <CODE
+CLASS="parameter"
+>cnmap</CODE
+> argument of 
+  <CODE
+CLASS="classname"
+>gnu.jel.Library</CODE
+> constructor,
+  allows to enable the non-primitive type casts in JEL compiled
+  expressions. If <CODE
+CLASS="constant"
+>cnmap!=null</CODE
+> it must be
+  <CODE
+CLASS="classname"
+>java.util.Hashtable</CODE
+> with 
+  <CODE
+CLASS="classname"
+>java.lang.Class</CODE
+> objects as
+  elements and <CODE
+CLASS="classname"
+>java.lang.String</CODE
+> objects as keys.
+  When the object cast 
+  <KBD
+CLASS="userinput"
+>"(non_primitive_type_name)�var"</KBD
+> is
+  encountered in the expression, "the non_primitive_type_name"
+  string is looked in the <CODE
+CLASS="parameter"
+>cnmap</CODE
+> hashtable and the 
+  cast to the corresponding class is generated by JEL. The absence of the
+  name in the hashtable produces the compile-time error. It is possible for
+  keys in <CODE
+CLASS="parameter"
+>cnmap</CODE
+> to contain "." (dot) symbols
+  in them.</P
+></DIV
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN304"
+></A
+>Chapter 6. Automatic unwrapping of objects to primitive
+  types.</H1
+><P
+>This problem appears mostly when one uses dynamic variables, but may
+  also arise in other cases. Suppose a reference to the object of the
+  class <CODE
+CLASS="classname"
+>Weight</CODE
+> (representing a weight of a certain item)
+  appeared in the expression. It is clear that 
+  <CODE
+CLASS="classname"
+>Weight</CODE
+> is always represented by a floating point
+  number (although it may have other properties, like units). If the 
+  class <CODE
+CLASS="classname"
+>Weight</CODE
+> has the method
+  <PRE
+CLASS="programlisting"
+>public double getValue()</PRE
+>
+  the value of weight can be accessed in expressions using syntax
+  <CODE
+CLASS="constant"
+>w.getValue()</CODE
+>, supposing the variable
+  <CODE
+CLASS="varname"
+>w</CODE
+> has type <CODE
+CLASS="classname"
+>Weight</CODE
+>.</P
+><P
+>To save typing (since version 0.9.3 of JEL) one may have the class
+  <CODE
+CLASS="classname"
+>Weight</CODE
+> implement
+  <CODE
+CLASS="classname"
+>gnu.jel.reflect.Double</CODE
+> interface. Then,
+  the aforementioned getValue method will be called automatically by JEL
+  (or object <CODE
+CLASS="varname"
+>w</CODE
+> will be "unwrapped" to 
+  primitive type). This
+  unwrapping will be performed automatically when needed: one can have
+  expressions <KBD
+CLASS="userinput"
+>"w+1.0"</KBD
+> meaning 
+  <KBD
+CLASS="userinput"
+>"w.getValue()+1"</KBD
+> and 
+  <KBD
+CLASS="userinput"
+>"w.getUnits()"</KBD
+> both
+  valid (in the second case <CODE
+CLASS="varname"
+>w</CODE
+> 
+  is not "unwrapped"). </P
+><P
+>There are <CODE
+CLASS="classname"
+>gnu.jel.reflect.*</CODE
+> interfaces
+  for all Java primitive types. To use the automatic unwrapping one
+  just needs to make his classes to implement one of these interfaces.</P
+><P
+>There is a similar mechanism for strings (since version 0.9.6)
+  and a corresponding empty interface 
+  <CODE
+CLASS="classname"
+>gnu.jel.reflect.String</CODE
+>
+  to denote objects automatically convertible to
+  <CODE
+CLASS="classname"
+>java.lang.String</CODE
+> by means of their 
+  <CODE
+CLASS="function"
+>.toString()</CODE
+> method. For
+  example, if <CODE
+CLASS="varname"
+>x</CODE
+> is of a class implementing
+  <CODE
+CLASS="classname"
+>gnu.jel.reflect.String</CODE
+> interface the expression
+  <KBD
+CLASS="userinput"
+>x+"a"</KBD
+> will be compiled into
+  <KBD
+CLASS="userinput"
+>x.toString()+"a"</KBD
+> (otherwise this expression
+  produces a error message). The objects automatically convertible to
+  strings can also be supplied as arguments of methods requiring
+  <CODE
+CLASS="classname"
+>java.lang.String</CODE
+> (usual method overloading rules
+  apply). Still, in the current version of JEL it is impossible to
+  cast methods of <CODE
+CLASS="classname"
+>java.lang.String</CODE
+> on such objects.
+  That is <KBD
+CLASS="userinput"
+>x.substring(1)</KBD
+> is a syntax error 
+  (unless <CODE
+CLASS="varname"
+>x</CODE
+>&#62; itself
+  has the <CODE
+CLASS="function"
+>.substring(int)</CODE
+> method). This deficiency can be
+  addressed in future.</P
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN337"
+></A
+>Chapter 7. Error detection and reporting</H1
+><P
+>Expressions are made by human, and making errors is the
+  natural property of humans, consequently, JEL has to be aware of
+  that.</P
+><P
+>There are two places, where errors can appear. First are the
+  compilation errors, which are thrown in the form of
+  <CODE
+CLASS="classname"
+>gnu.jel.CompilationException</CODE
+> by the
+  <CODE
+CLASS="function"
+>gnu.jel.Evaluator.compile</CODE
+>. These errors signal about
+  syntax problems in the entered expressions, wrong function names,
+  illegal <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>types</I
+></SPAN
+> combinations, but NOT about illegal
+  values of arguments of functions. The second source of errors is the
+  compiled code itself, Throwables, thrown out of
+  <CODE
+CLASS="function"
+>gnu.jel.CompiledExpression.evaluate</CODE
+> are primarily due to
+  the invalid <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>values</I
+></SPAN
+> of function arguments.</P
+><P
+>Compilation errors are easy to process. Normally, you should
+  surround compilation by the 
+  <PRE
+CLASS="programlisting"
+>   try {
+      // ... compilation
+   catch (CompilationException e) {
+      // ... process and report the error
+   }</PRE
+>
+   block. Caught <CODE
+CLASS="classname"
+>gnu.jel.CompilationException</CODE
+> can be
+   interrogated, then, on the subject of WHERE error has occurred
+   (<CODE
+CLASS="function"
+>getCol</CODE
+>) and WHAT was the
+   error (<CODE
+CLASS="function"
+>getMessage</CODE
+>). This
+   information should then be presented to user. It is wise to use
+   information about error column to position the cursor automatically
+   to the erroneous place in the expression.</P
+><P
+>Errors of the second type are appearing during the function
+   evaluation and can not be so nicely dealt with by JEL. They depend
+   on the actual library, supplied to the compiler. For example
+   methods of <CODE
+CLASS="classname"
+>java.lang.Math</CODE
+> do not generate any checked
+   exceptions at all (still, Errors are possible), but you may connect
+   library, of functions throwing exceptions. As a general rule :
+   <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>exceptions thrown by functions from the library are thrown from
+   <CODE
+CLASS="function"
+>evaluate</CODE
+> method</I
+></SPAN
+></P
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN355"
+></A
+>Chapter 8. Making things faster</H1
+><P
+>In the above text the result of the computation, returned by
+   <CODE
+CLASS="function"
+>evaluate</CODE
+> was always an object. While this is
+   very flexible it is not very fast. Objects have to be allocated on
+   heap and garbage collected. When the result of computation is the
+   Java primitive type it can be desirable to retrieve it without
+   creation of the object. This can be done (since the version 0.2 of
+   JEL) with <CODE
+CLASS="function"
+>evaluateXX()</CODE
+> family of calls (see
+   <CODE
+CLASS="classname"
+>gnu.jel.CompiledExpression</CODE
+>. There is an
+   <CODE
+CLASS="function"
+>evaluateXX()</CODE
+> method for each Java primitive
+   type, if you know what type expression has you can just call the
+   corresponding method.</P
+><P
+>If you do not know the type of the compiled expression you can
+   query it using <CODE
+CLASS="function"
+>getType</CODE
+>. Be warned, that the
+   call to wrong <CODE
+CLASS="function"
+>evaluateXX</CODE
+> method will result in
+   exception. Another tricky point is that JEL always selects smallest
+   data type for constant representation. Namely, expression
+   <KBD
+CLASS="userinput"
+>"1"</KBD
+> has type 
+   <SPAN
+CLASS="type"
+>byte</SPAN
+> and not <SPAN
+CLASS="type"
+>int</SPAN
+>, thus in
+   most cases you will have to query the type, and only then, call the
+   proper <CODE
+CLASS="function"
+>evaluateXX</CODE
+> method.</P
+><P
+>It is anyway possible to eliminate type checks at evaluation
+   time completely. There is a version of
+   <CODE
+CLASS="function"
+>compile</CODE
+> method in 
+   <CODE
+CLASS="classname"
+>gnu.jel.Evaluator</CODE
+>, which allows to fix
+   the type of the result. It directs the compiler to perform the
+   widening conversion to the given type, before returning the
+   result. For example: if you fix the type to be <SPAN
+CLASS="type"
+>int</SPAN
+>
+   (passing <CODE
+CLASS="classname"
+>java.lang.Integer.TYPE</CODE
+> as an 
+   argument to compile) all expressions (such as 
+   <KBD
+CLASS="userinput"
+>"1"</KBD
+>, <KBD
+CLASS="userinput"
+>"2+5"</KBD
+>,
+   <KBD
+CLASS="userinput"
+>"2*2"</KBD
+>) will be evaluated by 
+   <CODE
+CLASS="function"
+>evaluate_int</CODE
+> method of
+   the compiled expression. Also, the attempt to evaluate
+   <KBD
+CLASS="userinput"
+>"1+2L"</KBD
+> will be rejected by compiler, 
+   asking to insert the explicit narrowing conversion (such as
+   <KBD
+CLASS="userinput"
+>"(int)(1+2L)"</KBD
+>).</P
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN380"
+></A
+>Chapter 9. Serialization of compiled expressions</H1
+><P
+>There used to be a specialized serialization interface in JEL up
+  to version 0.8.3. The need for such interface was dictated by the fact
+  that JEL allowed to use constants of arbitrary reference types in
+  expressions, which is not supported directly by the Java class file
+  format. Starting with version 0.9 this feature was removed and now JEL
+  generates ordinary Java class files.</P
+><P
+>To store compiled expressions into a file just grab their code with
+  <CODE
+CLASS="function"
+>gnu.jel.Evaluator.compileBits</CODE
+>. The code is returned as a
+  byte array which is easy to save/restore. Then, the expression can be
+  instantiated using <CODE
+CLASS="classname"
+>gnu.jel.ImageLoader</CODE
+> with the code
+  <PRE
+CLASS="programlisting"
+>byte[] image; 
+// ... code to read the JEL-generated class file into the "image" ...
+CompiledExpression expression=(CompiledExpression)(ImageLoader.load(image)).newInstance();</PRE
+>
+  or, alternatively, by compiling your source against generated
+  class file. Note that in this version of JEL all generated classes
+  have the name "dump" and are in the root package. If there
+  will be such need in future the Evaluator interface can be extended to
+  assign user-supplied names for new expressions.</P
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN387"
+></A
+>Chapter 10. Limitations of JEL</H1
+><P
+>There is one serious limitation, which should be
+  mentioned. Actually it is not a JEL limitation but rather a limitation
+  of the typical Java run-time</P
+><P
+>To load compiled expressions into the Java virtual machine memory
+  JEL uses a custom <CODE
+CLASS="classname"
+>java.lang.ClassLoader</CODE
+>. While there
+  is nothing wrong with that, setting up a classLoader is a privileged
+  operation in Java. This means either JEL should run in a Java
+  <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>application</I
+></SPAN
+> (there are no security restrictions on Java
+  applications), or , if JEL is distributed in some custom
+  <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>applet</I
+></SPAN
+> the applet should be
+  <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>signed</I
+></SPAN
+>.</P
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN395"
+></A
+>Chapter 11. Summarizing remarks</H1
+><P
+> I hope you found JEL useful.  Don't hesitate to contact me if
+  there are any problems with JEL, please, report BUGS, suggest tests,
+  send me your patches,... There are still many improvements to be
+  done.</P
+><P
+>Most current information about JEL should be available at 
+  <A
+HREF="http://galaxy.fzu.cz/JEL/"
+TARGET="_top"
+>http://galaxy.fzu.cz/JEL/</A
+>.</P
+><P
+>JEL is the "free software" and is distributed to you
+  under terms of GNU General Public License. Find the precise terms of
+  the license in the file ./COPYING in the root of this distribution.</P
+><P
+>Please, contact the author directly if you'd like JEL to be
+  commercially licensed to you on a different terms.</P
+></DIV
+></DIV
+></BODY
+></HTML
+>

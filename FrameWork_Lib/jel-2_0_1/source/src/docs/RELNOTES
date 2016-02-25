@@ -1,0 +1,30 @@
+
+                   NEW FEATURES in version 2.0.1.
+
+This release provides a minor feature enchancement and the license upgrade.
+
+1. GPLv3 license
+
+  Starting with this release JEL is distributed under GNU GPLv3.
+
+2. Security context inheritance.
+
+  JEL-compiled expressions now execute in the same security context
+  (ProtectionDomain) as JEL itself (specifically, as gnu.jel.ImageLoader
+  class). This should permit easy integration of JEL into the signed
+  web-distributed Applets, running with SecurityManager enabled. Previously
+  JEL-generated code ran as completely "untrusted". Now it is possible
+  to call protected functions (such as System.getProperty), provided they
+  are registered with gnu.jel.Library, from within JEL expressions.
+
+  Please be more careful now with planning abd design of your gnu.jel.Library.
+
+
+                       PLANNED FEATURES
+
+1. Allowing to call methods with variable number of arguments in JEL
+   expressions.
+   
+
+October 12 2007 
+           Konstantin Metlov.

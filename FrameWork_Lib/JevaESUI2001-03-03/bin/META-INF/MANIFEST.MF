@@ -1,0 +1,7 @@
+Manifest-Version: 1.0   
+Main-Class: edu.mit.ai.psg.jevaESUI.JevaESGUI
+Created-By: 1.2 (Sun Microsystems Inc.)   
+Implementation-Title: JevaESUI: Java Evaluator --- Expressions & State
+ ments User Interfaces   
+Implementation-Version: 0.20.01.03.03   
+

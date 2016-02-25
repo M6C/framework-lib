@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<META name="Author" content="Konstantin Metlov">
+<META name="keywords" 
+content="Java, compiler, expression, single line, evaluate, JEL">
+<META name="description" 
+content="JEL is a library, which allows to evaluate single-line
+arithmetic expressions. JEL is not an interpreter, it is a
+compiler. Expressions are compiled into Java bytecode, allowing to
+evaluate them fast. JEL supports all primitive Java types and allows
+to call both static and virtual methods of Java classes.">
+<META name="copyright" content="&copy; 1998 Konstantin Metlov (metlov@fzu.cz)">
+
+<link REL=StyleSheet HREF="jel.css" TYPE="text/css">
+<title>Java Expressions Library (JEL) home</title>
+</HEAD>
+<BODY>
+<DIV CLASS="Emblemka"><A HREF="http://www.gnu.org/"><img 
+ src="gnu-head-sm-transp.png" alt="GNU project" width="129" 
+style="border:none;" height="122"></A></DIV>
+<H1>Java Expressions Library</H1>
+
+<H2>What is JEL ?</H2>
+
+<P> JEL is the library for evaluating a simple single line expressions
+in Java. There is certain class of tasks where user should be given a
+possibility to enter an expression of his own into the program.
+Typical examples include : plotting <I>user-defined
+functions</I>, fitting the data by the arbitrary <I>user-defined
+functions</I>, calculation of integrals and solving differential
+equations involving the <I>user-defined functions</I>... and many many
+more.... The key term above is the &quot;evaluation of the
+user-defined functions&quot;, which is exactly what JEL is supposed to
+do for You.
+
+<P> The key feature of JEL is the fact that it is a compiler !!! To
+write the interpreter for expressions is the task, close to trivial
+but incurs a HUGE perfomance penalty due to the fact that Java is
+interpreted language itself. JEL, in contrary, compiles expressions
+directly to Java bytecodes, allowing their fast evaluation. Moreover,
+if Your Java virtual mashine has JIT compiler, expressions are
+transparently compiled into the native machine code, resulting in
+performance HIGHER that for most C written interpreters (plus JEL do
+not require recompilation when transferred from platform to platform).
+
+<P>The complete list of JEL <A HREF="manual.html#FEATURES">features</A>
+is given in its <A HREF="manual.html">manual</A>.
+
+<H2>New features in the last version 0.9.10</H2>
+
+<P> improved the size (by &gt;30%, it is now &lt;34k) and performance of the
+library, program is now represented by tree, new hand-written
+parser. For more details see RELEASE NOTES below. Because of massive
+changes this release may be unstable, in the case of problems please
+revert to JEL 0.9.9 (can be downloaded below), which is API
+compatible. Don't forget to report problems to mailing lists.
+
+
+<H2>Download JEL (Feb 13, 2002, version 0.9.10)</H2>
+
+<P> Be sure You have read and understand the terms of the <A
+HREF="license.txt">GNU General Public License</A>.
+
+<P> JEL is now compiled by JDK 1.2 compiler, but should
+work with JDK 1.1 VMs also. JEL is available in two forms:
+<UL>
+
+<LI> For UNIX download <A HREF="jel-0.9.10.tar.gz">
+<TT>jel-0.9.10.tar.gz</TT></A> (329,118 bytes compressed, about 1.4 Mb
+uncompressed)
+
+<LI> For Windows download <A HREF="jel-0_9_10.zip">
+<TT>jel-0_9_10.zip</TT></A> (647,224 bytes compressed, about 1.4 Mb
+uncompressed)
+</UL>
+
+<P>Contents of both archives is exactly the same.
+
+<P>Also available online : |<A HREF="readme.txt">README</A>|
+<A HREF="manual.html">MANUAL</A>|<A HREF="relnotes.txt">RELEASE NOTES</A>|
+
+
+<H2>Old releases</H2>
+<P>
+0.9.9 (<A HREF="jel-0.9.9.tar.gz">.tar.gz</A>, <A HREF="jel-0_9_9.zip">zip</A>);
+
+0.9.8 (<A HREF="jel-0.9.8.tar.gz">.tar.gz</A>, <A HREF="jel-0_9_8.zip">zip</A>);
+
+0.9.7 (<A HREF="jel-0.9.7.tar.gz">.tar.gz</A>, <A HREF="jel-0_9_7.zip">zip</A>);
+0.9.6 (<A HREF="jel-0.9.6.tar.gz">.tar.gz</A>, <A HREF="jel-0_9_6.zip">zip</A>);
+0.9.5 (<A HREF="jel-0.9.5.tar.gz">.tar.gz</A>, <A HREF="jel-0_9_5.zip">zip</A>);
+0.9.4 (<A HREF="jel-0.9.4.tar.gz">.tar.gz</A>, <A HREF="jel-0_9_4.zip">zip</A>);
+0.9.3 (buggy, <A HREF="jel-0.9.3.tar.gz">.tar.gz</A>, <A HREF="jel-0_9_3.zip">zip</A>);
+0.9.1 (<A HREF="jel-0.9.1.tar.gz">.tar.gz</A>, <A HREF="jel-0_9_1.zip">zip</A>);
+0.9.0 (rewrite of the code generator, <A HREF="jel-0.9.0.tar.gz">.tar.gz</A>, <A HREF="jel-0_9_0.zip">zip</A>);
+0.8.3 (<A HREF="jel-0.8.3.tar.gz">.tar.gz</A>, <A HREF="jel-0_8_3.zip">zip</A>);
+0.8.3-JDK1.2 (<A HREF="jel-0.8.3-JDK1.2.tar.gz">.tar.gz</A>, <A HREF="jel-0_8_3-JDK1_2.zip">zip</A>);
+0.8.1 (<A HREF="jel-0.8.1.tar.gz">.tar.gz</A>, <A HREF="jel-0_8_1.zip">zip</A>);
+0.8.1-JDK1.2 (<A HREF="jel-0.8.1-JDK1.2.tar.gz">.tar.gz</A>, <A HREF="jel-0_8_1-JDK1_2.zip">zip</A>);
+0.8 (<A HREF="jel-0.8.tar.gz">.tar.gz</A>, <A HREF="jel-0_8.zip">zip</A>);
+0.2 (<A HREF="jel-0.2.tar.gz">.tar.gz</A>, <A HREF="jel-0_2.zip">zip</A>);
+0.1 (<A HREF="jel-0.1.tar.gz">.tar.gz</A>, <A HREF="jel-0_1.zip">zip</A>);
+
+<H2>Mailing lists</H2>
+
+<P>If there is a need, don't hesitate to post to these lists. I (KLM)
+always monitor them.
+
+<DL>
+<DT>
+<A HREF="http://mail.gnu.org/mailman/listinfo/help-jel">Help-JEL</A>
+<DD>
+Please ask here about things JEL supposedly does, but You don't know how to
+make it to.
+<DT>
+<A HREF="http://mail.gnu.org/mailman/listinfo/bug-jel">Bug-JEL</A>
+<DD>
+Please report bugs (anything that does not work as You expect it)
+to this list.
+</DL>
+
+<H2>Other files related to JEL (unsupported)</H2>
+
+<DL>
+<DT><A HREF="lcomp_for_JEL.tar.gz">lcomp_for_JEL.tar.gz</A> 
+
+<DD>This is a prototype logical expressions compiler for JEL. The code
+of this prototype is now completely integrated into the main
+branch. However, if You would like to understand how logical
+expressions are compiled You may find useful to look at this
+prototype. The main logic occupies about 30 lines of code, don't be
+confused by relatively large archive size, it's parser which makes
+the archive heavier.
+
+<DT><A HREF="d2i_ms_bug.tar.gz">d2i_ms_bug.tar.gz</A> 
+
+<DD> This archive holds the test case for &quot;d2i instruction
+bug&quot; in Microsoft JIT for Microsoft Java. This bug makes one of
+the tests in JEL testsuite fail when run on Microsoft Java VM with JIT
+compiler enabled. This bug is not fixed. As a workaround You may want
+to disable JIT when running JEL in MS Java VM. I did NOT submitted
+description of this bug to MS (You can do it). Use Microsoft
+products at Your own risk.
+
+<P>Other JVM's and JIT's tested (Blackdown Linux port of SUN's JDK
+with &quot;tya&quot; JIT, HP UX JDK with HP JIT, and most JVM's in
+interpreted mode) are free of this bug. The best way to see if JEL
+runs on Your JVM is to run JEL testsuite (now includes about 100 tests
+and instantiates close to 1000 different expressions). If some tests
+are failing -- tell <A HREF="mailto:metlov@fzu.cz">me</A> about it..
+
+</DL>
+
+<H2>Legal</H2>
+
+<P>JEL is distributed to You under terms of the <A
+HREF="license.txt">GNU General Public License</A>. This means it is
+&quot;free software&quot; . However, any program, using JEL
+<STRONG>MUST</STRONG> be the &quot;free software&quot; as well.
+
+<P>I would be very happy to consider requests for JEL enchancements
+and modifications (to fit some particular purpose), syntax of the
+input language, for example, can be easily changed... Contact <A
+HREF="mailto:metlov@fzu.cz">me</A> directly if You need customized,
+supported version of JEL.
+
+<P>
+<P CLASS="Copyright"> JEL &copy; 1998 &mdash; 2001 by Konstantin L. Metlov
+&lt;metlov@fzu.cz&gt;</P>
+</BODY>
+</HTML>
+
+
+
